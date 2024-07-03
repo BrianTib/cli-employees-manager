@@ -12,11 +12,6 @@ export async function createPostgresClient() {
     });
     
     await client.connect();
-
-    // Create the employee tables
-    await createEmployeeTables(client);
-    await generateMockData(client);
-
     return client;
 }
 

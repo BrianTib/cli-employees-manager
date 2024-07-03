@@ -2,14 +2,16 @@ DROP DATABASE IF EXISTS employees_db;
 
 CREATE DATABASE employees_db;
 
+\c employees_db;
+
 -- Create the department table
-CREATE TABLE department (
+CREATE TABLE IF NOT EXISTS department (
     id SERIAL PRIMARY KEY,
     name VARCHAR(30)
 );
 
 -- Create the role table
-CREATE TABLE roles (
+CREATE TABLE IF NOT EXISTS role (
     id SERIAL PRIMARY KEY,
     title VARCHAR(30),
     salary DECIMAL,
@@ -18,7 +20,7 @@ CREATE TABLE roles (
 );
 
 -- Create the employee table
-CREATE TABLE employee (
+CREATE TABLE IF NOT EXISTS employee (
     id SERIAL PRIMARY KEY,
     first_name VARCHAR(30),
     last_name VARCHAR(30),
