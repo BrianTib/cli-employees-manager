@@ -11,6 +11,7 @@
   "description": "",
   "type": "module",
   "dependencies": {
+    "@faker-js/faker": "^8.4.1",
     "inquirer": "^9.3.2",
     "pg": "^8.12.0"
   }

@@ -1,3 +1,12 @@
-import { createPostgresClient } from "./util/postgres"
+import { CompanyInterface } from './util/interface.js';
+import inquirer from 'inquirer';
 
-const postgresClient = await createPostgresClient();
+function init() {
+    const company = new CompanyInterface();
+
+    inquirer
+        .prompt(company.getPrompts())
+        .then(company.processPrompt);
+}
+
+init();
