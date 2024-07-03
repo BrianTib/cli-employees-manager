@@ -12,62 +12,24 @@ export async function createPostgresClient() {
     });
     
     await client.connect();
+    await generateMockData(client);
+
     return client;
-}
-
-async function createEmployeeTables(client) {
-    if (!client) { return; }
-
-    try {
-        // Create the departments table
-        await client.query(`
-            CREATE TABLE IF NOT EXISTS department (
-                id SERIAL PRIMARY KEY,
-                name VARCHAR(30) UNIQUE NOT NULL
-            );
-        `);
-
-        // Create the roles table
-        await client.query(`
-            CREATE TABLE IF NOT EXISTS role (
-                id SERIAL PRIMARY KEY,
-                title VARCHAR(30) UNIQUE NOT NULL,
-                salary DECIMAL NOT NULL,
-                department_id INTEGER NOT NULL,
-                FOREIGN KEY (department_id) REFERENCES department(id)
-            );
-        `);
-
-        // Create the employees table
-        await client.query(`
-            CREATE TABLE IF NOT EXISTS employee (
-                id SERIAL PRIMARY KEY,
-                first_name VARCHAR(30) NOT NULL,
-                last_name VARCHAR(30) NOT NULL,
-                role_id INTEGER NOT NULL,
-                manager_id INTEGER,
-                FOREIGN KEY (role_id) REFERENCES role(id),
-                FOREIGN KEY (manager_id) REFERENCES employee(id)
-            );
-        `);
-
-        console.log("Tables created successfully.");
-    } catch (err) {
-        console.error("Error creating tables:", err);
-    }
 }
 
 // Generate mock data and insert into the database
 async function generateMockData(client) {
     try {
         for (let i = 0; i < 100; i++) {
+            // Generate fake data
             const firstName = faker.person.firstName();
             const lastName = faker.person.lastName();
             const title = faker.person.jobTitle();
             const salary = faker.finance.amount({ min: 30000, max: 150000, dec: 2 });
             const departmentName = faker.commerce.department();
-    
-            // Insert into department table
+
+            // Insert into department table a new department
+            // and get back it's ID
             const resDept = await client.query(
                 'INSERT INTO department (name) VALUES ($1) RETURNING id',
                 [departmentName]
