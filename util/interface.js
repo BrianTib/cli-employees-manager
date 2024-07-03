@@ -50,6 +50,16 @@ export class CompanyInterface {
                 const query = await this.db.query("SELECT * FROM department");
                 console.table(query.rows);
             } break;
+            
+            case ACTIONS.VIEW_ROLES: {
+                const query = await this.db.query("SELECT * FROM role");
+                console.table(query.rows);
+            } break;
+            
+            case ACTIONS.VIEW_EMPLOYEES: {
+                const query = await this.db.query("SELECT * FROM employee");
+                console.table(query.rows);
+            } break;
         }
         
         // As long as we're not closing, reprompt the user

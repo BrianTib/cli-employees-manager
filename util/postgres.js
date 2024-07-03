@@ -20,34 +20,42 @@ export async function createPostgresClient() {
 // Generate mock data and insert into the database
 async function generateMockData(client) {
     try {
+        // Create a random amount of departments
+        const departmentsCount = 25;
+        for (let i = 0; i < departmentsCount; i++) {
+            const departmentName = faker.commerce.department();
+            // Insert into department table a new department
+            // and get back it's ID
+            await client.query(
+                'INSERT INTO department (name) VALUES ($1)',
+                [departmentName]
+            );
+        }
+
         for (let i = 0; i < 100; i++) {
             // Generate fake data
             const firstName = faker.person.firstName();
             const lastName = faker.person.lastName();
             const title = faker.person.jobTitle();
             const salary = faker.finance.amount({ min: 30000, max: 150000, dec: 2 });
-            const departmentName = faker.commerce.department();
+            const isManager = Math.random() <= 0.25;
 
-            // Insert into department table a new department
-            // and get back it's ID
-            const resDept = await client.query(
-                'INSERT INTO department (name) VALUES ($1) RETURNING id',
-                [departmentName]
-            );
-
-            const departmentId = resDept.rows[0].id;
+            const departmentId = Math.floor(Math.random() * departmentsCount) + 1;
     
+            console.log({title, salary, departmentId});
             // Insert into role table
-            const resRole = await client.query(
+            const { rows: roleRows } = await client.query(
                 'INSERT INTO role (title, salary, department) VALUES ($1, $2, $3) RETURNING id',
                 [title, salary, departmentId]
             );
-            const roleId = resRole.rows[0].id;
+
+            console.log(roleRows);
+            const roleId = roleRows[0].id;
     
             // Insert into employee table
             await client.query(
-                'INSERT INTO employee (first_name, last_name, role_id) VALUES ($1, $2, $3)',
-                [firstName, lastName, roleId]
+                'INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ($1, $2, $3, $4)',
+                [firstName, lastName, roleId, isManager ? i + 1 : null]
             );
         }
 
