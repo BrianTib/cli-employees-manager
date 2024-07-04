@@ -172,7 +172,9 @@ export class CompanyInterface {
                         choices: [
                             // Allow the option to not assign a manager
                             { name: `No Manager`, value: null },
-                            ...employees.rows.map(employee => ({ name: `${employee.first_name} ${employee.last_name}`, value: employee.id }))
+                            ...employees.rows
+                            .filter(employee => employee.manager_id === null)
+                            .map(employee => ({ name: `${employee.first_name} ${employee.last_name}`, value: employee.id }))
                         ]
                     }
                 ]);
@@ -229,6 +231,7 @@ export class CompanyInterface {
                         message: "Select the employee's manager (leave blank for no changes)",
                         choices: [
                             // Allow the option to not assign a manager
+                            // which makes them a manager
                             { name: `No Manager`, value: null },
                             ...employees.rows.map(employee => ({ name: `${employee.first_name} ${employee.last_name}`, value: employee.id }))
                         ]
@@ -305,7 +308,7 @@ export class CompanyInterface {
                         name: 'manager_id',
                         message: "Select the manager",
                         choices: employees.rows
-                            .filter(employee => employee.id === employee.manager_id)
+                            .filter(employee => employee.manager_id === null)
                             .map(employee => ({ name: `${employee.first_name} ${employee.last_name}`, value: employee.id }))
                     }
                 ]);
