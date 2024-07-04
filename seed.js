@@ -43,6 +43,7 @@ async function createTables() {
                 salary DECIMAL NOT NULL,
                 department_id INTEGER NOT NULL,
                 FOREIGN KEY (department_id) REFERENCES department(id)
+                ON DELETE CASCADE
             )
             `,
             // Add the employees table
@@ -54,7 +55,9 @@ async function createTables() {
                 role_id INTEGER NOT NULL,
                 manager_id INTEGER,
                 FOREIGN KEY (role_id) REFERENCES role(id),
+                ON DELETE CASCADE,
                 FOREIGN KEY (manager_id) REFERENCES employee(id)
+                ON DELETE SET NULL
             )
             `
         ];
@@ -96,20 +99,21 @@ async function seedTables() {
             );
         }
 
-        // Create an arbitrary number of roles
-        const titles = [];
+        const roles = {};
         const rolesCount = 10;
+        // Create an arbitrary number of roles
         for (let i = 0; i < rolesCount; i++) {
             const title = faker.person.jobTitle();
-            if (titles.includes(title)) {
+            if (roles[title]) {
                 // Skip this iteration
                 i--;
                 continue;
             }
-
-            titles.push(title);
+            
             const salary = faker.finance.amount({ min: 30000, max: 150000, dec: 0 });
             const departmentId = Math.floor(Math.random() * departmentsCount) + 1;
+            roles[title] = departmentId;
+
             await client.query(
                 'INSERT INTO role (title, salary, department_id) VALUES ($1, $2, $3)',
                 [title, salary, departmentId]
@@ -121,13 +125,14 @@ async function seedTables() {
             const firstName = faker.person.firstName();
             const lastName = faker.person.lastName();
             const roleId = Math.floor(Math.random() * rolesCount) + 1;
+            const departmentId = roles[roleId];
             // The first generated employees are managers as long
             // as they are less than the number of departments
             const isManager = i < departmentsCount;
 
             await client.query(
                 'INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ($1, $2, $3, $4)',
-                [firstName, lastName, roleId, isManager ? i + 1 : null]
+                [firstName, lastName, roleId, isManager ? null : departmentId]
             );
         }
 
