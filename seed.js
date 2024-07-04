@@ -78,7 +78,7 @@ async function seedTables() {
     try {
         // Create an arbitrary number of departments
         const departments = [];
-        const departmentsCount = 10;
+        const departmentsCount = 3;
         for (let i = 0; i < departmentsCount; i++) {
             const departmentName = faker.commerce.department();
             if (departments.includes(departmentName)) {
@@ -98,7 +98,7 @@ async function seedTables() {
 
         // Create an arbitrary number of roles
         const titles = [];
-        const rolesCount = 15;
+        const rolesCount = 10;
         for (let i = 0; i < rolesCount; i++) {
             const title = faker.person.jobTitle();
             if (titles.includes(title)) {
@@ -117,7 +117,7 @@ async function seedTables() {
         }
 
         // Generate the employees
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 20; i++) {
             const firstName = faker.person.firstName();
             const lastName = faker.person.lastName();
             const roleId = Math.floor(Math.random() * rolesCount) + 1;
