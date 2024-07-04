@@ -36,6 +36,11 @@ export class CompanyInterface {
                         { name: 'Exit', value: ACTIONS.EXIT },
                     ]
                 },
+                {
+                    type: 'input',
+                    name: 'employee',
+                    message: ''
+                }
             ]);
     
             return this.processPrompt(answers);

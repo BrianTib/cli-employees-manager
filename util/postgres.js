@@ -3,16 +3,16 @@ import { faker } from '@faker-js/faker';
 const { Client } = pg;
 
 // Return a new postgress client
-export async function createPostgresClient() {
+export async function createPostgresClient(database = "employees_db") {
     const client = new Client({
         user: 'postgres',
         password: 'mysql',
         host: 'localhost',
-        database: 'employees_db'
+        database
     });
     
     await client.connect();
-    await generateMockData(client);
+    //await generateMockData(client);
 
     return client;
 }
