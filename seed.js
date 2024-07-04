@@ -42,8 +42,7 @@ async function createTables() {
                 title VARCHAR(64) UNIQUE NOT NULL,
                 salary DECIMAL NOT NULL,
                 department_id INTEGER NOT NULL,
-                FOREIGN KEY (department_id) REFERENCES department(id)
-                ON DELETE CASCADE
+                FOREIGN KEY (department_id) REFERENCES department(id) ON DELETE CASCADE
             )
             `,
             // Add the employees table
@@ -97,12 +96,12 @@ async function seedTables() {
             );
         }
 
-        const roles = {};
+        const roles = new Map();
         const rolesCount = 10;
         // Create an arbitrary number of roles
         for (let i = 0; i < rolesCount; i++) {
             const title = faker.person.jobTitle();
-            if (roles[title]) {
+            if (roles.has(title)) {
                 // Skip this iteration
                 i--;
                 continue;
@@ -110,7 +109,7 @@ async function seedTables() {
             
             const salary = faker.finance.amount({ min: 30000, max: 150000, dec: 0 });
             const departmentId = Math.floor(Math.random() * departmentsCount) + 1;
-            roles[title] = departmentId;
+            roles.set(title, departmentId);
 
             await client.query(
                 'INSERT INTO role (title, salary, department_id) VALUES ($1, $2, $3)',
@@ -123,7 +122,7 @@ async function seedTables() {
             const firstName = faker.person.firstName();
             const lastName = faker.person.lastName();
             const roleId = Math.floor(Math.random() * rolesCount) + 1;
-            const departmentId = roles[roleId];
+            const departmentId = roles.get(Array.from(roles.keys())[roleId - 1]);
             // The first generated employees are managers as long
             // as they are less than the number of departments
             const isManager = i < departmentsCount;
