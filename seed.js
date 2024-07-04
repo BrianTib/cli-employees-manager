@@ -86,6 +86,8 @@ async function seedTables() {
                 i--;
                 continue;
             }
+
+            departments.push(departmentName);
             // Insert into department table a new department
             // and get back it's ID
             await client.query(
@@ -105,6 +107,7 @@ async function seedTables() {
                 continue;
             }
 
+            titles.push(title);
             const salary = faker.finance.amount({ min: 30000, max: 150000, dec: 0 });
             const departmentId = Math.floor(Math.random() * departmentsCount) + 1;
             await client.query(

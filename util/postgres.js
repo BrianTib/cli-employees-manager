@@ -11,7 +11,5 @@ export async function createPostgresClient(database = "employees_db") {
     });
     
     await client.connect();
-    //await generateMockData(client);
-
     return client;
 }
