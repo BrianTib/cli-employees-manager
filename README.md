@@ -13,7 +13,7 @@ This is a command-line application that interacts with the PostgresSQL database 
 
 ## Installation
 
-1. (optional) run `npm run seed` to seed the database and start with some fictional data
+1. Run `npm run seed` to seed the database and start with some fictional data
 4. Run `npm start` to launch the CLI
 
 ## Questions
@@ -25,5 +25,5 @@ For additional questions contact me through [GitHub](https://github.com/briantib
 For the sake of seeding the database with FakerJS data, sizes of columns of type VARCHAR have been increased on the schema.sql
 
 ## Links
-- [GITHUB REPO]()
-- [VIDEO DEMONSTRATION]()
+- [GITHUB REPO](https://github.com/BrianTib/cli-employees-manager)
+- [VIDEO DEMONSTRATION](https://drive.google.com/file/d/1JHzJx06EX81d-ahsCNbP1Qu2deZDBr0T/view?usp=sharing)
